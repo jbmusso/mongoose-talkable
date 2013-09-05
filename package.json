@@ -1,0 +1,27 @@
+{
+  "name": "mongoose-talkable",
+  "version": "0.0.0",
+  "description": "Mongoose plugin and express routes adding simple opt-in messaging system between users",
+  "main": "index.coffee",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gulthor/mongoose-talkable.git"
+  },
+  "keywords": [
+    "mongoose",
+    "plugin",
+    "message",
+    "messaging",
+    "conversation",
+    "chat",
+    "express"
+  ],
+  "author": "Jean-Baptiste Musso <jbmusso+github@gmail.com> (https://github.com/gulthor)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gulthor/mongoose-talkable/issues"
+  }
+}
