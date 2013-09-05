@@ -1,0 +1,6 @@
+--compilers coffee:coffee-script
+--require should
+-R spec
+--ui bdd
+--recursive
+--bail
