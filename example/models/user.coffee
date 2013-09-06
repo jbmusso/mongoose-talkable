@@ -1,7 +1,7 @@
 mongoose = require("mongoose")
-talkable = require("../../lib/plugin")
-
 findbyids = require("mongoose-findbyids")
+
+talkable = require("../../lib/plugin")
 
 
 UserSchema = mongoose.Schema(
@@ -11,7 +11,6 @@ UserSchema = mongoose.Schema(
 
 UserSchema.plugin(findbyids)
 UserSchema.plugin(talkable)
-
 
 try
   mongoose.model("User", UserSchema)

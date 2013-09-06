@@ -1,4 +1,6 @@
-mongoose = require("mongoose")
+prequire = require("parent-require")
+mongoose = prequire("mongoose")
+
 Q = require("q")
 
 Conversations = require("./models/conversation")
@@ -218,7 +220,6 @@ module.exports = (schema, options) ->
 
 
   schema.method("getInbox", (callback) ->
-    console.log "--------getInbox-----------"
     query =
       "participants.ids":
         $in: [mongoose.Types.ObjectId(@id)]
@@ -227,15 +228,8 @@ module.exports = (schema, options) ->
         $not:
           $size: 0
 
-    console.log query
-
-    console.log Conversations.find
-
     # Get inbox as an array of conversations
     Conversations.find(query, (err, inbox) ->
-      console.log "====================OOoooOOOOO============="
-      console.log err, inbox
-
       callback(err, inbox)
     )
   )

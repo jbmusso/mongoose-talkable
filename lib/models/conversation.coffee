@@ -1,4 +1,7 @@
-mongoose = require("mongoose")
+prequire = require("parent-require")
+mongoose = prequire("mongoose")
+
+
 _ = require("underscore")
 troop = require("mongoose-troop")
 
