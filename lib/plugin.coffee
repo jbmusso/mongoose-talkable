@@ -62,7 +62,8 @@ module.exports = (schema, options) ->
           Q.ninvoke(Conversations, "findOrCreate", this, [this, grantorId])
         ])
         .then((results) =>
-          grantor.emit("conversationPermissionAsked", {sender: this})
+          @notify(grantor, "conversationPermissionAsked")
+
 
           result =
             code: 0
@@ -112,9 +113,9 @@ module.exports = (schema, options) ->
         Q.ninvoke(conversation, "start")
       ])
       .then((results) =>
-        @model("User").findById(requester, (err, user) =>
+        @model("User").findById(requester, (err, requester) =>
           if not err
-            user.emit("conversationPermissionGranted", {sender: this})
+            @notify(requester, "conversationPermissionGranted")
         )
 
         result =
@@ -202,7 +203,7 @@ module.exports = (schema, options) ->
 
           @model("User").findById(recipientId, (err, user) =>
             if not err
-              user.emit("privateMessageReceived", {sender: this, message})
+              @notify(user, "privateMessageReceived", {message})
           )
 
           return callback(null, conversation)

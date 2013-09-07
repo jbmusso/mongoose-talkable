@@ -148,7 +148,4 @@ ConversationSchema.statics.findPrivateConversation = (participants, callback) ->
   )
 
 
-try
-  mongoose.model("Conversation", ConversationSchema)
-
-module.exports = mongoose.model("Conversation")
+module.exports = mongoose.model("Conversation", ConversationSchema)

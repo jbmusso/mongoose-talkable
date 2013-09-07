@@ -12,7 +12,5 @@ UserSchema = mongoose.Schema(
 UserSchema.plugin(findbyids)
 UserSchema.plugin(talkable)
 
-try
-  mongoose.model("User", UserSchema)
 
-module.exports = mongoose.model("User")
+module.exports = mongoose.model("User", UserSchema)
