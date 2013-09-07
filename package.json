@@ -1,6 +1,6 @@
 {
   "name": "mongoose-talkable",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mongoose plugin and express routes adding simple opt-in messaging system between users",
   "main": "index.coffee",
   "scripts": {
