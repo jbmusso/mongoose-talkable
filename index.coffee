@@ -3,8 +3,8 @@ model = require("./lib/models/conversation")
 
 
 module.exports =
-  routes: (app) ->
-    require("./lib/routes")(app)
+  routes: (app, options) ->
+    require("./lib/routes")(app, options)
     
   plugin: plugin
 

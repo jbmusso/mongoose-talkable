@@ -84,7 +84,7 @@ module.exports = (app, options) ->
       else
       res.format(
         html: ->
-          res.render("conversations/requests.html", {requests})
+          res.render(options.requests.template, {requests})
       )
     )
   )
@@ -103,9 +103,7 @@ module.exports = (app, options) ->
       else
         res.format(
           html: ->
-            res.render("inbox.html",
-              inbox: inbox
-            )
+            res.render(options.inbox.template, {inbox})
           json: ->
             res.json(inbox)
         )
