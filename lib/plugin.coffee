@@ -230,7 +230,8 @@ module.exports = (schema, options) ->
           $size: 0
 
     # Get inbox as an array of conversations
-    Conversations.find(query, (err, inbox) ->
+    Conversations.find(query).sort({modified: -1}).exec((err, inbox) =>
+      inbox.owner = this
       callback(err, inbox)
     )
   )

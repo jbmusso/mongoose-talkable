@@ -121,7 +121,7 @@ ConversationSchema.methods.deny = (callback) ->
 
 ConversationSchema.methods.addMessage = (user, message, callback) ->
   # Check if user is an allowed participant
-  if @participants.ids.indexOf(user._id) < 0
+  if not @hasParticipant(user)
     return callback("ERROR: User #{user.name} (#{user._id}) is not allowed to participate in the conversation with participants #{@participants}")
 
   message =
@@ -146,6 +146,21 @@ ConversationSchema.statics.findPrivateConversation = (participants, callback) ->
     else
       callback(null, conversation)
   )
+
+
+ConversationSchema.methods.getParticipantsWithout = (user) ->
+  return _.without(@participants.names, user.name)
+
+
+ConversationSchema.methods.getLatestMessage = ->
+  return _.last(@messages)
+
+
+ConversationSchema.methods.hasParticipant = (participant) ->
+  if @participants.ids.indexOf(participant.id) < 0
+    return false
+  return true
+
 
 
 module.exports = mongoose.model("Conversation", ConversationSchema)

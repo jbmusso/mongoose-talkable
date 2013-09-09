@@ -1,5 +1,7 @@
 ensureLoggedIn = require("connect-ensure-login").ensureLoggedIn
+Q = require("q")
 
+Conversations = require("./models/conversation")
 
 module.exports = (app, options) ->
   app.post("/conversations/permission/ask", ensureLoggedIn("/login"), (req, res, next) ->
@@ -80,7 +82,10 @@ module.exports = (app, options) ->
   app.get("/conversations/requests", ensureLoggedIn("/login"), (req, res, next) ->
     req.user.findConversationRequestsReceived((err, requests) ->
       if err
-        console.log err
+        res.format(
+          html: ->
+            res.render("error500.html")
+        )
       else
       res.format(
         html: ->
@@ -132,3 +137,67 @@ module.exports = (app, options) ->
           )
     )
   )
+
+
+  app.get("/conversations/:id", ensureLoggedIn("/login"), (req, res, next) ->
+    Conversations.findById(req.params.id, (err, conversation) ->
+      if err
+        error = "Sorry, an error occured while retrieving this conversations."
+        return res.format(
+          html: ->
+            res.status(500)
+            res.render("error500.html")
+          json: ->
+            res.json(errorMessage, 500)
+        )
+
+      if conversation.hasParticipant(req.user)
+        # Logged user is allowed to see the conversation
+        res.format(
+          html: ->
+            res.render("conversations/view.html", {conversation})
+          json: ->
+            res.json(conversation)
+        )
+      else
+        error = "Could not find this conversation. It may or may not exist, but you need to login before."
+        res.status(404) # Could be 403 Forbidden instead
+        res.format(
+          html: ->
+            res.render("error404.html")
+          json: ->
+            res.json(error)
+        )
+    )
+  )
+
+
+  # Add a message to a conversation
+  app.post("/conversations/:id/messages", ensureLoggedIn("/login"), (req, res, next) ->
+    Q.ninvoke(Conversations, "findById", req.params.id)
+    .then((conversation) ->
+      if conversation.hasParticipant(req.user)
+        return Q.ninvoke(conversation, "addMessage", req.user, req.body.message)
+      else
+        throw "Could not add a message to this conversation. It may or may not exist, but you need to login before."
+    )
+    .then((conversation) ->
+      return res.format(
+        html: ->
+          res.redirect("back")
+        json: ->
+          res.json("Message added to conversation #{conversation.id}")
+      )
+    )
+    .fail((err) ->
+      error = "Sorry, an error occured on our side while retrieving this conversations."
+      return res.format(
+        html: ->
+          res.status(500)
+          res.render("error500.html")
+        json: ->
+          res.json(err, 500)
+      )
+    )
+  )
+
